@@ -20,6 +20,12 @@ describe('BowlingGame', function() {
                 game.rollOne(toomuchpins);
             }).toThrowError('number of pins cannot exceed 10');
         });
+
+        it('is a strike, frame auto-completes', function() {
+            game.rollOne(10);
+            expect(game.recordRollTwo[0]).toEqual(null);
+            expect(game.frameNumber).toEqual(2);
+        });
     });
 
     describe('Roll Two', function() {
@@ -126,11 +132,22 @@ describe('BowlingGame', function() {
 
     });
 
-    describe('Running total', function() {
+    describe('updateScore', function() {
         it('updates the score after each frame', function() {
             game.rollOne(1);
             game.rollTwo(1);
             expect(game.scoreboard).toEqual([2]);
         });
+
+
+
+        // describe('Strike!', function() {
+        //     it('can update the score for a strike', function() {
+        //         game.rollOne(10);
+        //         game.rollOne(1);
+        //         game.rollTwo(2);
+        //         expect(game.scoreboard).toEqual([13, 3]);
+        //     });
+        // });
     });
 });

@@ -33,7 +33,16 @@ BowlingGame.prototype.rollOne = function(numberOfPins) {
     } else if (this.gameOver === true) {
         throw new Error('game is over')
     }
-    this.recordRollOne.push(numberOfPins);
+
+    if (numberOfPins === this.NUMBER_OF_PINS) {
+        this.recordRollOne.push(numberOfPins);
+        this.recordRollTwo.push(null);
+        this.updateScore();
+        this.nextFrame();
+    } else {
+        this.recordRollOne.push(numberOfPins);
+    }
+
 };
 
 BowlingGame.prototype.rollTwo = function(numberOfPins) {
@@ -74,8 +83,25 @@ BowlingGame.prototype.updateScore = function() {
     var fnum = this.frameNumber - 1;
     var r1 = this.recordRollOne;
     var r2 = this.recordRollTwo;
-    var pmax = this.NUMBER_OF_PINS;
-    if (r1[fnum] + r2[fnum] < pmax) {
-        this.scoreboard.push(r1[fnum] + r2[fnum]);
+    var pnum = this.NUMBER_OF_PINS;
+
+    for (var i = 0; i < this.frameNumber; i++) {
+
+        if (r1[fnum] + r2[fnum] < pnum) {
+            this.scoreboard[i] = r1[fnum] + r2[fnum];
+        } else if (r1 === pnum && (fnum - i > 2) ) {
+            this.scoreboard[i] = r1[fnum] + this.nextTwoRolls(fnum);
+        }
     }
+};
+
+BowlingGame.prototype.nextTwoRolls = function(k) {
+    var r1, r2;
+    r1 = this.recordRollOne[k+1];
+    if (r1 === 10) {
+        r2 = this.recordRollTwo[k+2];
+    } else {
+        r2 = this.recordRollTwo[k+1];
+    }
+    return r1+r2;
 };
