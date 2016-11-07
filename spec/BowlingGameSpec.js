@@ -125,4 +125,12 @@ describe('BowlingGame', function() {
         });
 
     });
+
+    describe('Running total', function() {
+        it('updates the score after each frame', function() {
+            game.rollOne(1);
+            game.rollTwo(1);
+            expect(game.scoreboard).toEqual([2]);
+        });
+    });
 });

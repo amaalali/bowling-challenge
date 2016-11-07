@@ -5,13 +5,14 @@ function BowlingGame() {
     this.runningTotal = 0;
     this.recordRollOne = [];
     this.recordRollTwo = [];
+    this.scoreboard = [];
     this.frameNumber = 1;
     this.gameOver = false;
 }
 
 BowlingGame.prototype.score = function() {
     if (this.frameNumber === 1) {
-        return this.runningTotal = 0;
+        return 0;
     } else {
         var r1 = this.recordRollOne.reduce(function(a, b) {
             return a + b;
@@ -20,7 +21,7 @@ BowlingGame.prototype.score = function() {
         var r2 = this.recordRollTwo.reduce(function(a, b) {
             return a + b;
         });
-        return this.runningTotal = r1 + r2;
+        return r1 + r2;
     }
 };
 
@@ -46,6 +47,7 @@ BowlingGame.prototype.rollTwo = function(numberOfPins) {
         throw new Error('number of pins in frame cannot exceed 10');
     }
     this.recordRollTwo.push(numberOfPins);
+    this.updateScore();
     this.nextFrame();
 };
 
@@ -66,4 +68,14 @@ BowlingGame.prototype.checkRollOne = function() {
 
 BowlingGame.prototype.checkRollTwo = function() {
     return this.recordRollTwo;
+};
+
+BowlingGame.prototype.updateScore = function() {
+    var fnum = this.frameNumber - 1;
+    var r1 = this.recordRollOne;
+    var r2 = this.recordRollTwo;
+    var pmax = this.NUMBER_OF_PINS;
+    if (r1[fnum] + r2[fnum] < pmax) {
+        this.scoreboard.push(r1[fnum] + r2[fnum]);
+    }
 };
